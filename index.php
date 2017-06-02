@@ -1,47 +1,16 @@
-<?php session_start();
-	if (isset($_POST['pseudo']) AND isset($_POST['pass']))
-	{
-		try
-		{
-			$bdd = new PDO('mysql:host=127.0.0.1;port=8889;dbname=test;charset=utf8', 'root', 'root');
-		} 
-		catch (Exception $e)
-		{
-			die('Erreur : '.$e->getMessage());
-		}
-
-		$pass_hache = sha1($_POST['pass']);
-		$req = $bdd->prepare('SELECT id, pseudo, email, pass FROM membres WHERE pseudo = :pseudo  AND pass = :pass');
-		$req->execute(array('pseudo'=>$_POST['pseudo'], 'pass'=> $pass_hache));
-		$resultat = $req->fetch();
-        
-		if (!$resultat)
-		{
-			$_SESSION['message'] ='<strong>Mauvais identifiant ou mot de passe !</strong>';
-		}
-		else
-		{
-		    $_SESSION['id'] = $resultat['id'];
-		    $_SESSION['pseudo'] = $resultat['pseudo'];
-		    $_SESSION['email'] = $resultat['email'];
-		    $_SESSION['pass'] = $resultat['pass'];
-		    header('location:index.php');
-		}
-        $req->closeCursor();
-	}		
-?>
+<?php session_start();?>
 <?php /*echo '<pre>';print_r($_SESSION);echo '</pre>';*/?>
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title>IndexBoots</title>
-		
+		<meta charset="utf-8">		
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+	    <title>IndexBoots</title>
+
 		<link href="https://fonts.googleapis.com/css?family=Poppins:600|Roboto:300" rel="stylesheet">
-	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	    <link rel="stylesheet" type="text/css" href="fonts_style/bootstrapstyle.css"/> 	    
 	    <script src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js"></script>
 
@@ -53,7 +22,7 @@
 			<?php
 				if(isset($_SESSION['pseudo']) AND isset($_SESSION['pseudo']))
 				{
-					echo '<p class="main-color-bg text-center"> Bonjour '. $_SESSION['pseudo'].' <a class="btn btn-info" href="profil.php">profil</a> <a class="btn btn-info" href="deconnexion.php">deconnexion</a></p>';
+					echo '<p class="main-color-bg text-center"> Bonjour '. $_SESSION['pseudo']./*'<a class="btn btn-info" href="#">profil</a>*/ ' <a class="btn btn-info" href="deconnexion.php">deconnexion</a></p>';
 				}
 				else
 				{
@@ -69,7 +38,7 @@
 			        	<h4 class="modal-title bg-primary">Connexion</h4>
 			      	</div>
 			      	<div class="modal-body text-primary">		
-						<form class="form-inline" action="#connexion" method="POST">
+						<form class="form-inline" action="connexion.php" method="POST">
 					  		<div class="form-group">
 					  			<p>
 								<label for="pseudo"> Pseudo : </label><input class="form-control" type="text" name="pseudo"/>
@@ -119,15 +88,14 @@
 						<small>
 							La programmation informatique est une activité d'une richesse inépuissable et il est difficile de tout retenir d'un coup. C'est pourquoi les informaticiens font appel à des documentations pour chaque language qu'ils utilisent. Ces documentations, bien qu'exhaustives et très instructives, sont parfois un peu fastidieuses, surtout pour les programmateurs débutants. C'est pour cela que ce site à été créé : accéder à l'essentiel des informations nécessaires pour coder en l'espace de quelques click comme avec un "cheatsheet" (antisèche en anglais).<br/>
 							Attention ce site n'est pas là pour apprendre à coder dans les différents langages, pour cela il est conseillé de passer par des sites plus spécialisés. Ici vous n'apprendrez pas ce qu'est une variable, une fonction ou ce qu'est la POO, comment bien indenter votre code, les normes de formatage etc... vous devrez déjà savoir cela.
-						</small>
-					</div>					
+						</small>					
 				</section>
 				
 				<section class="info-left col-md-3">
 					<?php
 					try
 					{	
-						$bdd = new PDO('mysql:host=127.0.0.1;port=8889;dbname=test;charset=utf8', 'root', 'root');
+						$bdd = new PDO('mysql:host=db680795341.db.1and1.com;dbname=db680795341;charset=utf8', 'dbo680795341', 'Technici3n');
 					}
 					catch(Exception $e)
 					{
@@ -144,7 +112,9 @@
 					</footer>
 					<blockquote class="blockquote">
 						<small>
-							<?php echo nl2br(htmlspecialchars($donnees['contenu'])); ?><br/>
+							<?php echo nl2br(htmlspecialchars($donnees['contenu'])); 
+							$req->closeCursor();					 
+							?><br/>
 						</small>Cédric.
 					</blockquote>
 				</section>
@@ -165,11 +135,6 @@
 					<img class="logos-img" src="png/logos.png"/>
 				</section>
 			</div>
-		
-			<?php
-			}
-			$req->closeCursor();					 
-			?>
 			
 			<section class="article-bottom">
 				<h3 class="page-header">Ce que vous trouverez ici.</h3>
@@ -206,7 +171,7 @@
 							
 						try
 						{
-							$bdd = new PDO('mysql:host=127.0.0.1;port=8889;dbname=test;charset=utf8', 'root', 'root');
+							$bdd = new PDO('mysql:host=db680795341.db.1and1.com;dbname=db680795341;charset=utf8', 'dbo680795341', 'Technici3n');
 						} 
 						catch (Exception $e)
 						{
@@ -285,7 +250,7 @@
 			            </div>
 
 			            <script src="js/form_validation.js"></script>
-		            </form>	
+		            </form>		
 			    <br/>
 			    </div>
 			    <?php
@@ -300,7 +265,9 @@
 	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
 
 	<script src="https://code.jquery.com/jquery-3.2.1.js"  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="  crossorigin="anonymous"></script>
- 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ 	<script src="js/bootstrap.min.js"></script>
+
     <script>
         window.sr = ScrollReveal();
         sr.reveal('.navbar', {
